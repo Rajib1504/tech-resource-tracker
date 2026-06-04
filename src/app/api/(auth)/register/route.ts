@@ -50,11 +50,14 @@ export const POST = async (req: NextRequest) => {
                         imageUrl,
                   },
             });
+            if (!process.env.JWT_SECRET) {
+                  throw new Error("JWT_SECRET is missing in environment variables");
+            }
 
             // 1. Create the JWT
             const token = jwt.sign(
                   { id: result.id, email: result.email },
-                  process.env.JWT_SECRET!,
+                  process.env.JWT_SECRET,
                   { expiresIn: "7d" }
             );
 
