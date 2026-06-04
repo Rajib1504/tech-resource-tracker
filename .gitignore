@@ -45,3 +45,5 @@ next-env.d.ts
 AGENTS.md
 CLAUDE.md
 skills-lock.json
+
+/src/generated/prisma
