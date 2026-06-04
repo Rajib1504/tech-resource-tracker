@@ -20,6 +20,7 @@ model users {
   isVerified Boolean  @default(false)
   imageUrl   String?
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
 
   resources resource[]
 }
@@ -43,4 +44,5 @@ model resource {
   url         String
   description String?
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
