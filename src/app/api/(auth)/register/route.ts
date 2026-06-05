@@ -36,7 +36,7 @@ export const POST = async (req: NextRequest) => {
             if (existingUser) {
                   return NextResponse.json({
                         success: false,
-                        message: "User Already Registered",
+                        message: "User Already exist with this email",
                   }, { status: 400 })
             }
 
