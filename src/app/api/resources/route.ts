@@ -109,7 +109,83 @@ export const POST = async (req: NextRequest) => {
     }, { status: 500 })
   }
 
+}
+
+export const GET = async (req: NextRequest) => {
+  /*
+  check the token
+  check jwt secret
+   decode toekn
+   find user 
+   if user then based on id fetch resources 
+   if user dosen't find then show all resources 
+   
+  */
+  try {
+
+    const token = req.cookies.get("auth_token")?.value
+    if (!token) {
+      const allResources = await prisma.resource.findMany({
+        include: {
+          category: true,
+          user: {
+            select: {
+              name: true,
+              email: true,
+              isVerified: true,
+              imageUrl: true
+            }
+          },
+        },
+        orderBy: { createdAt: "desc" }
+      })
+      return NextResponse.json({
+        success: true,
+        message: "Resource fetched successfully",
+        data: allResources
+      }, { status: 200 })
+
+    }
+    if (!process.env.JWT_SECRET) {
+      return NextResponse.json({
+        success: false,
+        message: "JWT_SECRET not found "
+      }, { status: 500 })
+    }
+    const decode = jwt.verify(token, process.env.JWT_SECRET) as { id: string, email: string }
+    if (!decode) {
+      return NextResponse.json({
+        success: false,
+        message: "Invalid token or token is expired"
+      }, { status: 401 })
+    }
+
+    const allResources = await prisma.resource.findMany({
+      where: { userId: decode.id },
+      include: {
+        category: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+            isVerified: true,
+            imageUrl: true
+          }
+        },
+      },
+      orderBy: { createdAt: "desc" }
+    })
+    return NextResponse.json({
+      success: true,
+      message: "Resource fetched successfully",
+      data: allResources
+    }, { status: 200 })
 
 
-
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: "Something went wrong in resource service"
+    }, { status: 500 })
+  }
 }
