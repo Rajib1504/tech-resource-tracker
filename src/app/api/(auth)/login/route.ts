@@ -73,9 +73,10 @@ export const POST = async (req: NextRequest) => {
     console.log("LOGIN ERROR: ", error);
     return NextResponse.json(
       {
-        message: "Internal Server Error",
+        success: false,
+        message: "Something went wrong in login service",
       },
       { status: 500 },
     );
   }
-};
+};  

@@ -91,7 +91,8 @@ export const POST = async (req: NextRequest) => {
 
             return NextResponse.json(
                   {
-                        message: "Internal Server Error",
+                        success: false,
+                        message: "Something went wrong in register service",
                   },
                   { status: 500 },
             );
