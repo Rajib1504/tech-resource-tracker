@@ -20,6 +20,13 @@ export const registerUserSchema = z.object({
     .max(50, "Password must be at most 50 characters long"),
   imageUrl: z.string().optional(),
 });
+export const updateProfileSchema = z.object({
+  oldPassword: z.string().min(6, "Password must be at least 6 characters long").max(50, "Password must be at most 50 characters long"),
+  newPassword: z.string().min(6, "Password must be at least 6 characters long").max(50, "Password must be at most 50 characters long"),
+  imageUrl: z.string().optional(),
+})
+
 
 export type LoginUserSchema = z.infer<typeof loginUserSchema>;
 export type RegisterUserSchema = z.infer<typeof registerUserSchema>;
+export type updateProfileSchema = z.infer<typeof updateProfileSchema>
