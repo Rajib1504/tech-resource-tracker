@@ -19,6 +19,7 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
   return (
     <Dialog>
       <DialogTrigger
+        nativeButton={false}
         render={
           <motion.div
             initial={{ opacity: 0, y: 20 }}

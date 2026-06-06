@@ -20,6 +20,7 @@ import { NoiseOverlay } from "@/components/noise-overlay";
 import { CustomCursor } from "@/components/custom-cursor";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "DevVault",
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1 flex flex-col">{children}</main>
           <Footer />
+          <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
     </html>
