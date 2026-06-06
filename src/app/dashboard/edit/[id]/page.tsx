@@ -10,11 +10,11 @@ export default function EditResourcePage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
-  
+
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const [type, setType] = useState<"LINK" | "SNIPPET">("LINK");
   const [formData, setFormData] = useState({
     title: "",
@@ -29,7 +29,7 @@ export default function EditResourcePage() {
       try {
         const [catRes, resRes] = await Promise.all([
           fetch("/api/categories"),
-          fetch(`/api/resources/${id}`)
+          fetch(`/api/resources/${id}`),
         ]);
 
         const catData = await catRes.json();
@@ -101,21 +101,24 @@ export default function EditResourcePage() {
   return (
     <div className="p-6 md:p-10 space-y-8 max-w-3xl mx-auto w-full">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight font-sans">Edit Resource</h1>
+        <h1 className="text-3xl font-bold tracking-tight font-sans">
+          Edit Resource
+        </h1>
         <p className="text-muted-foreground font-mono">
           Update the details of your saved resource.
         </p>
       </div>
 
       <div className="bg-card border border-border/50 rounded-xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
-        
         {/* Type Selector (Disabled in edit) */}
         <div className="flex p-1 bg-muted/50 border border-border/50 rounded-lg mb-6 w-fit opacity-70 cursor-not-allowed">
           <button
             type="button"
             disabled
             className={`flex items-center gap-2 px-4 py-2 text-sm font-bold font-mono rounded-md transition-colors ${
-              type === "LINK" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+              type === "LINK"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground"
             }`}
           >
             <Link2 className="w-4 h-4" /> Link
@@ -124,7 +127,9 @@ export default function EditResourcePage() {
             type="button"
             disabled
             className={`flex items-center gap-2 px-4 py-2 text-sm font-bold font-mono rounded-md transition-colors ${
-              type === "SNIPPET" ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+              type === "SNIPPET"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground"
             }`}
           >
             <Code2 className="w-4 h-4" /> Snippet
@@ -133,71 +138,96 @@ export default function EditResourcePage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-medium font-mono">Title <span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium font-mono">
+              Title <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               className="w-full px-3 py-2 bg-background border border-border/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-sans text-sm transition-all"
             />
           </div>
 
           {type === "LINK" && (
             <div className="space-y-2">
-              <label className="text-sm font-medium font-mono">URL <span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium font-mono">
+                URL <span className="text-red-500">*</span>
+              </label>
               <input
                 type="url"
                 required={type === "LINK"}
                 value={formData.url}
-                onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, url: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-background border border-border/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all"
               />
             </div>
           )}
 
           <div className="space-y-2">
-            <label className="text-sm font-medium font-mono">Category <span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium font-mono">
+              Category <span className="text-red-500">*</span>
+            </label>
             <select
               required
               value={formData.categoryId}
-              onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, categoryId: e.target.value })
+              }
               className="w-full px-3 py-2 bg-background border border-border/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-sans text-sm transition-all"
               disabled
             >
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
               ))}
             </select>
-            <p className="text-xs text-muted-foreground mt-1 font-mono">Categories cannot be changed after creation.</p>
+            <p className="text-xs text-muted-foreground mt-1 font-mono">
+              Categories cannot be changed after creation.
+            </p>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium font-mono">Description</label>
+            <label className="text-sm font-medium font-mono">
+              Description <span className="text-red-500">*</span>
+            </label>
             <textarea
+              required
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               className="w-full px-3 py-2 bg-background border border-border/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-sans text-sm transition-all min-h-[80px]"
             />
           </div>
 
           {type === "SNIPPET" && (
             <div className="space-y-2">
-              <label className="text-sm font-medium font-mono">Code Snippet <span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium font-mono">
+                Code Snippet <span className="text-red-500">*</span>
+              </label>
               <textarea
                 required={type === "SNIPPET"}
                 value={formData.snippet}
-                onChange={(e) => setFormData({ ...formData, snippet: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, snippet: e.target.value })
+                }
                 className="w-full px-3 py-2 bg-background border border-border/50 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm transition-all min-h-[200px]"
               />
             </div>
           )}
 
-          <div className="flex flex-col-reverse sm:flex-row gap-4">
+          <div className=" flex justify-end items-end gap-4">
             <Button
               type="button"
               variant="outline"
-              className="w-full font-mono font-bold"
+              className=" font-mono font-bold"
               onClick={() => router.back()}
               disabled={isSubmitting}
             >
@@ -205,10 +235,14 @@ export default function EditResourcePage() {
             </Button>
             <Button
               type="submit"
-              className="w-full font-mono font-bold group"
+              className=" font-mono font-bold group"
               disabled={isSubmitting}
             >
-              {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : (
+                <Save className="w-4 h-4 mr-2" />
+              )}
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
           </div>
