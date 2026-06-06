@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { FaqSection } from "@/components/faq";
 import { TestimonialsSection } from "@/components/testimonials";
+import { RecentResources } from "@/components/recent-resources";
 import { HeroBackground } from "@/components/hero-background";
 import { WorkflowDemo } from "@/components/workflow-demo";
 
@@ -288,6 +289,8 @@ export default function Home() {
           <WorkflowDemo />
         </div>
       </section>
+
+      <RecentResources />
 
       <section
         id="features"
