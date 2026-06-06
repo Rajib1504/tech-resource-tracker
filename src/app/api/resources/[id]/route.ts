@@ -3,6 +3,7 @@ import { UpdateResourceSchema } from "@/Schemas/resourceSchema";
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken";
 import * as cheerio from "cheerio";
+import { getYouTubeThumbnail } from "@/lib/utils";
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   /*
@@ -131,32 +132,48 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id
 
     // Re-scrape if the URL changed and it's a LINK
     if (resourceType === "LINK" && resourceUrl && url !== findResource.url) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+      let newThumbnail = getYouTubeThumbnail(resourceUrl);
 
-        const res = await fetch(resourceUrl, { signal: controller.signal });
-        clearTimeout(timeoutId);
+      if (!newThumbnail) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-        if (res.ok) {
-          const html = await res.text();
-          const $ = cheerio.load(html);
+          const res = await fetch(resourceUrl, { 
+            signal: controller.signal,
+            headers: {
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+              "Accept-Language": "en-US,en;q=0.5"
+            }
+          });
+          clearTimeout(timeoutId);
 
-          let newThumbnail = $('meta[property="og:image"]').attr('content')
-            || $('meta[name="twitter:image"]').attr('content')
-            || null;
+          if (res.ok) {
+            const html = await res.text();
+            const $ = cheerio.load(html);
 
-          if (newThumbnail && newThumbnail.startsWith('/')) {
+            newThumbnail = $('meta[property="og:image"]').attr('content')
+              || $('meta[name="twitter:image"]').attr('content')
+              || null;
+
+            if (newThumbnail && newThumbnail.startsWith('/')) {
+              const urlObj = new URL(resourceUrl);
+              newThumbnail = `${urlObj.protocol}//${urlObj.host}${newThumbnail}`;
+            }
+          }
+          
+          if (!newThumbnail) {
             const urlObj = new URL(resourceUrl);
-            newThumbnail = `${urlObj.protocol}//${urlObj.host}${newThumbnail}`;
+            newThumbnail = `https://www.google.com/s2/favicons?domain=${urlObj.hostname}&sz=256`;
           }
-
-          if (newThumbnail) {
-            thumbnailUrl = newThumbnail;
-          }
+        } catch (err) {
+          console.error("Failed to scrape URL metadata on update:", err);
         }
-      } catch (err) {
-        console.error("Failed to scrape URL metadata on update:", err);
+      }
+      
+      if (newThumbnail) {
+        thumbnailUrl = newThumbnail;
       }
     }
 

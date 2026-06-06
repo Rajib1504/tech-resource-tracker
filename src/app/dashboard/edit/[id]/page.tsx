@@ -193,7 +193,7 @@ export default function EditResourcePage() {
             </div>
           )}
 
-          <div className="flex gap-4">
+          <div className="flex flex-col-reverse sm:flex-row gap-4">
             <Button
               type="button"
               variant="outline"

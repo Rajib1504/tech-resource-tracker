@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { prisma } from "@/lib/db";
 import * as cheerio from "cheerio";
+import { getYouTubeThumbnail } from "@/lib/utils";
 
 export const POST = async (req: NextRequest) => {
   /*
@@ -87,28 +88,44 @@ export const POST = async (req: NextRequest) => {
     let thumbnailUrl = null;
 
     if (type === "LINK" && url) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+      thumbnailUrl = getYouTubeThumbnail(url);
 
-        const res = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
+      if (!thumbnailUrl) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-        if (res.ok) {
-          const html = await res.text();
-          const $ = cheerio.load(html);
+          const res = await fetch(url, { 
+            signal: controller.signal,
+            headers: {
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+              "Accept-Language": "en-US,en;q=0.5"
+            }
+          });
+          clearTimeout(timeoutId);
 
-          thumbnailUrl = $('meta[property="og:image"]').attr('content')
-            || $('meta[name="twitter:image"]').attr('content')
-            || null;
+          if (res.ok) {
+            const html = await res.text();
+            const $ = cheerio.load(html);
 
-          if (thumbnailUrl && thumbnailUrl.startsWith('/')) {
-            const urlObj = new URL(url);
-            thumbnailUrl = `${urlObj.protocol}//${urlObj.host}${thumbnailUrl}`;
+            thumbnailUrl = $('meta[property="og:image"]').attr('content')
+              || $('meta[name="twitter:image"]').attr('content')
+              || null;
+
+            if (thumbnailUrl && thumbnailUrl.startsWith('/')) {
+              const urlObj = new URL(url);
+              thumbnailUrl = `${urlObj.protocol}//${urlObj.host}${thumbnailUrl}`;
+            }
           }
+          
+          if (!thumbnailUrl) {
+            const urlObj = new URL(url);
+            thumbnailUrl = `https://www.google.com/s2/favicons?domain=${urlObj.hostname}&sz=256`;
+          }
+        } catch (err) {
+          console.error("Failed to scrape URL metadata:", err);
         }
-      } catch (err) {
-        console.error("Failed to scrape URL metadata:", err);
       }
     }
 
