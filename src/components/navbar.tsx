@@ -14,16 +14,16 @@ export function Navbar() {
         </Link>
         <div className="flex items-center gap-4">
           <nav className="hidden md:flex items-center gap-6 text-sm font-mono text-muted-foreground">
-            <Link href="#features" className="hover:text-foreground transition-colors">
+            <Link href="/#features" className="hover:text-foreground transition-colors">
               Features
             </Link>
-            <Link href="#how-it-works" className="hover:text-foreground transition-colors">
+            <Link href="/#how-it-works" className="hover:text-foreground transition-colors">
               How it Works
             </Link>
-            <Link href="#reviews" className="hover:text-foreground transition-colors">
+            <Link href="/#reviews" className="hover:text-foreground transition-colors">
               Reviews
             </Link>
-            <Link href="#faq" className="hover:text-foreground transition-colors">
+            <Link href="/#faq" className="hover:text-foreground transition-colors">
               FAQ
             </Link>
           </nav>
