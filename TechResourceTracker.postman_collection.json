@@ -25,14 +25,9 @@
             "url": {
               "raw": "http://localhost:3000/api/register",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "3000",
-              "path": [
-                "api",
-                "register"
-              ]
+              "path": ["api", "register"]
             }
           },
           "response": []
@@ -54,14 +49,9 @@
             "url": {
               "raw": "http://localhost:3000/api/login",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "3000",
-              "path": [
-                "api",
-                "login"
-              ]
+              "path": ["api", "login"]
             }
           },
           "response": []
@@ -74,14 +64,9 @@
             "url": {
               "raw": "http://localhost:3000/api/me",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "3000",
-              "path": [
-                "api",
-                "me"
-              ]
+              "path": ["api", "me"]
             }
           },
           "response": []
@@ -94,14 +79,175 @@
             "url": {
               "raw": "http://localhost:3000/api/logout",
               "protocol": "http",
-              "host": [
-                "localhost"
-              ],
+              "host": ["localhost"],
               "port": "3000",
-              "path": [
-                "api",
-                "logout"
-              ]
+              "path": ["api", "logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "1. Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Frontend Development\",\n  \"slug\": \"frontend-development\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "categories"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Resources",
+      "item": [
+        {
+          "name": "1. Get All Resources",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/resources",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create Resource (LINK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Next.js Docs\",\n  \"type\": \"LINK\",\n  \"url\": \"https://nextjs.org/docs\",\n  \"description\": \"The official documentation for Next.js\",\n  \"categoryId\": \"YOUR_CATEGORY_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/resources",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Create Resource (SNIPPET)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Fetch Example\",\n  \"type\": \"SNIPPET\",\n  \"snippet\": \"fetch('/api/data').then(r => r.json());\",\n  \"description\": \"A simple fetch snippet\",\n  \"categoryId\": \"YOUR_CATEGORY_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/resources",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Get Single Resource",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/resources/YOUR_RESOURCE_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources", "YOUR_RESOURCE_ID_HERE"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Update Resource",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"type\": \"SNIPPET\",\n  \"snippet\": \"console.log('Updated snippet');\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/resources/YOUR_RESOURCE_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources", "YOUR_RESOURCE_ID_HERE"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Delete Resource",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/resources/YOUR_RESOURCE_ID_HERE",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "resources", "YOUR_RESOURCE_ID_HERE"]
             }
           },
           "response": []

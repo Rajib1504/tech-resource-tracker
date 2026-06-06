@@ -2,13 +2,15 @@ import { prisma } from "@/lib/db";
 import { UpdateResourceSchema } from "@/Schemas/resourceSchema";
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken";
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+import * as cheerio from "cheerio";
+
+export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   /*
   take data from params 
   show the data
   */
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await prisma.resource.findUnique({
       where: { id },
       include: {
@@ -35,7 +37,6 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
       data: data
     }, { status: 200 })
 
-
   } catch (error) {
     return NextResponse.json({
       success: false,
@@ -44,7 +45,7 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export const PATCH = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   /*
   take data from body 
   validate with resource schema
@@ -62,7 +63,7 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
   return response
   */
   try {
-    const { id } = params;
+    const { id } = await params;
     const data = await req.json()
     const validateData = UpdateResourceSchema.safeParse(data)
     if (!validateData.success) {
@@ -72,7 +73,7 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
         error: validateData.error.flatten().fieldErrors
       }, { status: 400 })
     }
-    const { title, url, description } = validateData.data
+    const { title, url, description, type, snippet } = validateData.data
     const token = req.cookies.get("auth_token")?.value
     if (!token) {
       return NextResponse.json({
@@ -122,11 +123,51 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
       }, { status: 401 })
     }
 
+    // Determine the type to use (updated or existing)
+    const resourceType = type || findResource.type;
+    const resourceUrl = url !== undefined ? url : findResource.url;
+
+    let thumbnailUrl = findResource.thumbnailUrl;
+
+    // Re-scrape if the URL changed and it's a LINK
+    if (resourceType === "LINK" && resourceUrl && url !== findResource.url) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        const res = await fetch(resourceUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const html = await res.text();
+          const $ = cheerio.load(html);
+
+          let newThumbnail = $('meta[property="og:image"]').attr('content')
+            || $('meta[name="twitter:image"]').attr('content')
+            || null;
+
+          if (newThumbnail && newThumbnail.startsWith('/')) {
+            const urlObj = new URL(resourceUrl);
+            newThumbnail = `${urlObj.protocol}//${urlObj.host}${newThumbnail}`;
+          }
+
+          if (newThumbnail) {
+            thumbnailUrl = newThumbnail;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to scrape URL metadata on update:", err);
+      }
+    }
+
     const updateResource = await prisma.resource.update({
       where: { id },
       data: {
         title,
-        url,
+        type: resourceType as "LINK" | "SNIPPET",
+        url: resourceType === "LINK" ? resourceUrl : null,
+        snippet: resourceType === "SNIPPET" ? (snippet !== undefined ? snippet : findResource.snippet) : null,
+        thumbnailUrl: resourceType === "LINK" ? thumbnailUrl : null,
         description
       }
     })
@@ -142,7 +183,7 @@ export const PATCH = async (req: NextRequest, { params }: { params: { id: string
     }, { status: 500 })
   }
 }
-export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   /*
   take id form params
   check token
@@ -158,7 +199,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
   return response
   */
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const token = req.cookies.get("auth_token")?.value
     if (!token) {

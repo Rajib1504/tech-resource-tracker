@@ -15,6 +15,12 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+import { ThemeProvider } from "@/components/theme-provider";
+import { NoiseOverlay } from "@/components/noise-overlay";
+import { CustomCursor } from "@/components/custom-cursor";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+
 export const metadata: Metadata = {
   title: "DevVault",
   description: "Developer Resource Management SaaS",
@@ -38,8 +44,19 @@ export default function RootLayout({
         geist.variable,
       )}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col">
-        {children}
+      <body suppressHydrationWarning className="min-h-full flex flex-col cursor-auto md:cursor-none">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NoiseOverlay />
+          <CustomCursor />
+          <Navbar />
+          <main className="flex-1 flex flex-col">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@ import { resourceSchema } from "@/Schemas/resourceSchema";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken"
 import { prisma } from "@/lib/db";
+import * as cheerio from "cheerio";
 
 export const POST = async (req: NextRequest) => {
   /*
@@ -27,18 +28,19 @@ export const POST = async (req: NextRequest) => {
         error: validateData.error.flatten().fieldErrors
       }, { status: 400 })
     }
-    const { title, url, description, categoryId } = validateData.data
+    const { title, url, description, categoryId, type, snippet } = validateData.data
 
-    const existingResource = await prisma.resource.findFirst({
-      where: { url }
-    })
-    if (existingResource) {
-      return NextResponse.json({
-        success: false,
-        message: "Resource already exist"
-      }, { status: 401 })
+    if (type === "LINK" && url) {
+      const existingResource = await prisma.resource.findFirst({
+        where: { url }
+      })
+      if (existingResource) {
+        return NextResponse.json({
+          success: false,
+          message: "Resource already exist"
+        }, { status: 401 })
+      }
     }
-
 
     const token = req.cookies.get("auth_token")?.value
     if (!token) {
@@ -82,13 +84,44 @@ export const POST = async (req: NextRequest) => {
       }, { status: 401 })
     }
 
+    let thumbnailUrl = null;
+
+    if (type === "LINK" && url) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const html = await res.text();
+          const $ = cheerio.load(html);
+
+          thumbnailUrl = $('meta[property="og:image"]').attr('content')
+            || $('meta[name="twitter:image"]').attr('content')
+            || null;
+
+          if (thumbnailUrl && thumbnailUrl.startsWith('/')) {
+            const urlObj = new URL(url);
+            thumbnailUrl = `${urlObj.protocol}//${urlObj.host}${thumbnailUrl}`;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to scrape URL metadata:", err);
+      }
+    }
+
     const createResorce = await prisma.resource.create({
       data: {
         title,
-        url,
+        url: type === "LINK" ? url : null,
+        snippet: type === "SNIPPET" ? snippet : null,
         description,
         userId: findUser.id,
-        categoryId: findCategory.id
+        categoryId: findCategory.id,
+        type: type as "LINK" | "SNIPPET",
+        thumbnailUrl
       }
     })
     return NextResponse.json({

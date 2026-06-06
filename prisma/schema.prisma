@@ -34,15 +34,23 @@ model category {
   resources resource[]
 }
 
+enum ResourceType {
+  LINK
+  SNIPPET
+}
+
 model resource {
-  id          String   @id @default(uuid())
-  userId      String
-  user        users    @relation(fields: [userId], references: [id])
-  categoryId  String
-  category    category @relation(fields: [categoryId], references: [id])
-  title       String
-  url         String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+  id           String       @id @default(uuid())
+  userId       String
+  user         users        @relation(fields: [userId], references: [id])
+  categoryId   String
+  category     category     @relation(fields: [categoryId], references: [id])
+  type         ResourceType @default(LINK)
+  title        String
+  url          String?
+  snippet      String?
+  thumbnailUrl String?
+  description  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
 }
