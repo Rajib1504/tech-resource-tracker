@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
+import Link from "next/link";
 
 interface ResourceCardProps {
   resource: any;
@@ -164,16 +166,41 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
               </div>
             </div>
 
-            {resource.type === "LINK" && resource.url && (
-              <a
-                href={resource.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium text-sm shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-y-px hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/dashboard/edit/${resource.id}`}
+                className="inline-flex items-center gap-2 bg-muted text-muted-foreground px-4 py-2 rounded-md hover:bg-muted/80 transition-colors font-medium text-sm"
               >
-                Visit Resource <ExternalLink className="w-4 h-4" />
-              </a>
-            )}
+                Edit
+              </Link>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (!confirm("Are you sure you want to delete this resource?")) return;
+                  try {
+                    const res = await fetch(`/api/resources/${resource.id}`, { method: "DELETE" });
+                    if (!res.ok) throw new Error("Failed to delete");
+                    toast.success("Resource deleted!");
+                    window.location.reload();
+                  } catch (err) {
+                    toast.error("Failed to delete resource");
+                  }
+                }}
+                className="inline-flex items-center gap-2 bg-red-500/10 text-red-500 px-4 py-2 rounded-md hover:bg-red-500/20 transition-colors font-medium text-sm"
+              >
+                Delete
+              </button>
+              {resource.type === "LINK" && resource.url && (
+                <a
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors font-medium text-sm shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:translate-y-px hover:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+                >
+                  Visit <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </DialogContent>

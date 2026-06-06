@@ -18,8 +18,7 @@ const jetBrainsMono = JetBrains_Mono({
 import { ThemeProvider } from "@/components/theme-provider";
 import { NoiseOverlay } from "@/components/noise-overlay";
 import { CustomCursor } from "@/components/custom-cursor";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { SiteHeader, SiteFooter } from "@/components/site-layout";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
@@ -54,9 +53,9 @@ export default function RootLayout({
         >
           <NoiseOverlay />
           <CustomCursor />
-          <Navbar />
+          <SiteHeader />
           <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
+          <SiteFooter />
           <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>

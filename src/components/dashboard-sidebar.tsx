@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   TerminalSquare,
@@ -13,6 +13,7 @@ import {
   User2,
   Code2,
   FolderOpen,
+  PlusCircle,
 } from "lucide-react";
 import {
   Sidebar,
@@ -38,6 +39,7 @@ import { toast } from "sonner";
 
 export function DashboardSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -89,27 +91,39 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link href="/dashboard" />} tooltip="Overview">
+                <SidebarMenuButton isActive={pathname === "/dashboard"} render={<Link href="/dashboard" />} tooltip="Overview">
                   <LayoutDashboard />
                   <span>Overview</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link href="/dashboard/vault" />} tooltip="My Vault">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/vault")} render={<Link href="/dashboard/vault" />} tooltip="My Vault">
                   <FolderOpen />
                   <span>My Vault</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link href="/dashboard/snippets" />} tooltip="Saved Snippets">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/snippets")} render={<Link href="/dashboard/snippets" />} tooltip="Saved Snippets">
                   <Code2 />
                   <span>Snippets</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton render={<Link href="/dashboard/links" />} tooltip="Saved Links">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/links")} render={<Link href="/dashboard/links" />} tooltip="Saved Links">
                   <Bookmark />
                   <span>Links</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/categories")} render={<Link href="/dashboard/categories" />} tooltip="Categories">
+                  <FolderOpen />
+                  <span>Categories</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/add")} render={<Link href="/dashboard/add" />} tooltip="Add Resource">
+                  <PlusCircle />
+                  <span>Add Resource</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

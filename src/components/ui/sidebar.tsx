@@ -514,8 +514,11 @@ function SidebarMenuButton({
     defaultTagName: "button",
     props: mergeProps<"button">(
       {
+        "data-active": isActive ? "true" : undefined,
+        "data-sidebar": "menu-button",
+        "data-size": size,
         className: cn(sidebarMenuButtonVariants({ variant, size }), className),
-      },
+      } as any,
       props
     ),
     render: !tooltip ? render : <TooltipTrigger render={render} />,
