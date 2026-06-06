@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FolderOpen, Plus, Loader2, Trash2 } from "lucide-react";
+import { FolderOpen, Plus, Loader2, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -10,6 +10,11 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+
+  // Edit State
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [isEditingSubmit, setIsEditingSubmit] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -34,7 +39,6 @@ export default function CategoriesPage() {
     if (!newCategoryName.trim()) return;
 
     setIsSubmitting(true);
-    // Auto-generate slug from name
     const slug = newCategoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
     try {
@@ -52,11 +56,40 @@ export default function CategoriesPage() {
 
       toast.success("Category created successfully!");
       setNewCategoryName("");
-      fetchCategories(); // Refresh the list
+      fetchCategories(); 
     } catch (err: any) {
       toast.error(err.message || "Something went wrong.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleUpdateCategory = async (id: string) => {
+    if (!editName.trim()) return;
+
+    setIsEditingSubmit(true);
+    const slug = editName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+    try {
+      const res = await fetch("/api/categories", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, name: editName, slug }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to update category");
+      }
+
+      toast.success("Category updated!");
+      setEditingCategoryId(null);
+      fetchCategories();
+    } catch (err: any) {
+      toast.error(err.message || "Something went wrong.");
+    } finally {
+      setIsEditingSubmit(false);
     }
   };
 
@@ -122,10 +155,51 @@ export default function CategoriesPage() {
                   key={category.id} 
                   className="flex items-center justify-between p-3 border border-border/50 rounded-lg hover:border-primary/50 transition-colors bg-background"
                 >
-                  <div className="flex flex-col">
-                    <span className="font-bold font-sans capitalize">{category.name}</span>
-                    <span className="text-[10px] font-mono text-muted-foreground">{category.slug}</span>
-                  </div>
+                  {editingCategoryId === category.id ? (
+                    <div className="flex items-center gap-2 w-full">
+                      <input
+                        type="text"
+                        autoFocus
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        className="flex-1 min-w-0 px-2 py-1 bg-background border border-primary/50 rounded outline-none font-sans text-sm"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleUpdateCategory(category.id);
+                          if (e.key === "Escape") setEditingCategoryId(null);
+                        }}
+                      />
+                      <button 
+                        onClick={() => handleUpdateCategory(category.id)}
+                        disabled={isEditingSubmit}
+                        className="p-1.5 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-md transition-colors"
+                      >
+                        {isEditingSubmit ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                      </button>
+                      <button 
+                        onClick={() => setEditingCategoryId(null)}
+                        disabled={isEditingSubmit}
+                        className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-md transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex flex-col flex-1 min-w-0">
+                        <span className="font-bold font-sans capitalize truncate">{category.name}</span>
+                        <span className="text-[10px] font-mono text-muted-foreground truncate">{category.slug}</span>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          setEditingCategoryId(category.id);
+                          setEditName(category.name);
+                        }}
+                        className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors ml-2 shrink-0"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
