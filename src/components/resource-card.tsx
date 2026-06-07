@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link2, Code2, ExternalLink, Calendar } from "lucide-react";
+import { Link2, Code2, ExternalLink, Calendar, Copy, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,21 @@ interface ResourceCardProps {
 }
 
 export function ResourceCard({ resource, index = 0, showActions = false }: ResourceCardProps) {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(resource.snippet);
+      setIsCopied(true);
+      toast.success("Copied to clipboard!");
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger
@@ -138,6 +154,13 @@ export function ResourceCard({ resource, index = 0, showActions = false }: Resou
 
           {resource.type === "SNIPPET" && resource.snippet && (
             <div className="bg-muted/50 rounded-lg p-4 overflow-x-auto border border-border/50 font-mono text-sm relative group">
+              <button
+                onClick={handleCopy}
+                className="absolute top-2 right-2 p-2 rounded-md bg-background/80 backdrop-blur hover:bg-background text-muted-foreground hover:text-foreground border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-sm"
+                title="Copy snippet"
+              >
+                {isCopied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              </button>
               <pre>
                 <code>{resource.snippet}</code>
               </pre>
