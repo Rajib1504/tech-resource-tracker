@@ -13,7 +13,7 @@ export function RecentResources() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getRecentResources(5).then((data) => {
+    getRecentResources(4).then((data) => {
       setResources(data.resources);
       setLoading(false);
     });
@@ -24,12 +24,19 @@ export function RecentResources() {
       <section className="py-20 relative z-10 border-t border-border/40 bg-background/50 backdrop-blur-md">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Recently Added</h2>
-            <p className="text-muted-foreground font-mono">Loading the vault...</p>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Recently Added
+            </h2>
+            <p className="text-muted-foreground font-mono">
+              Loading the vault...
+            </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-pulse max-w-7xl mx-auto">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="h-[300px] bg-card/50 rounded-xl border border-border/50" />
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[300px] bg-card/50 rounded-xl border border-border/50"
+              />
             ))}
           </div>
         </div>
@@ -42,7 +49,10 @@ export function RecentResources() {
   }
 
   return (
-    <section id="recent-resources" className="py-20 relative z-10 border-t border-border/40 bg-background/50 backdrop-blur-md">
+    <section
+      id="recent-resources"
+      className="py-20 relative z-10 border-t border-border/40 bg-background/50 backdrop-blur-md"
+    >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-medium text-primary backdrop-blur-sm mb-4">
@@ -65,7 +75,10 @@ export function RecentResources() {
 
         <div className="mt-12 flex justify-center">
           <Link href="/resources">
-            <Button size="lg" className="font-mono gap-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all bg-primary hover:bg-primary/90">
+            <Button
+              size="lg"
+              className="font-mono gap-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] hover:translate-y-1 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] transition-all bg-primary hover:bg-primary/90"
+            >
               View All Resources <ExternalLink className="w-4 h-4" />
             </Button>
           </Link>
