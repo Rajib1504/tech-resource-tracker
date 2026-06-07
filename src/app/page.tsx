@@ -229,7 +229,7 @@ const items = [
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+      <section className="relative pt-36 pb-20 md:pt-40 md:pb-32 overflow-hidden">
         <HeroBackground />
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <motion.div
@@ -275,7 +275,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how-it-works" className="py-20 md:py-32 relative z-10 border-t border-border/40 bg-background/50 backdrop-blur-md">
+      <section
+        id="how-it-works"
+        className="py-20 md:py-32 relative z-10 border-t border-border/40 bg-background/50 backdrop-blur-md"
+      >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
