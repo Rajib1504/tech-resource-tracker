@@ -41,17 +41,30 @@ export function Footer() {
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2 group w-fit">
               <IconLogo className="h-6 w-auto text-primary transition-transform group-hover:scale-105" />
-              <span className="font-mono font-bold tracking-tight text-lg">DevVault</span>
+              <span className="font-mono font-bold tracking-tight text-lg">
+                DevVault
+              </span>
             </Link>
             <p className="max-w-xs text-sm text-muted-foreground font-mono">
-              The operating system for your developer resources, snippets, and documentation.
+              The operating system for your developer resources, snippets, and
+              documentation.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <Link href="https://github.com/Rajib1504" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link
+                href="https://github.com/Rajib1504/tech-resource-tracker"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <GithubIcon className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </Link>
-              <Link href="https://x.com/rajib_dev1504" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link
+                href="https://x.com/rajib_dev1504"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
                 <TwitterIcon className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
@@ -59,28 +72,57 @@ export function Footer() {
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-sm font-bold font-sans uppercase tracking-wider">Product</h4>
+            <h4 className="text-sm font-bold font-sans uppercase tracking-wider">
+              Product
+            </h4>
             <ul className="space-y-2 text-sm text-muted-foreground font-mono">
               <li>
-                <Link href="#features" className="hover:text-primary transition-colors">Features</Link>
+                <Link
+                  href="#features"
+                  className="hover:text-primary transition-colors"
+                >
+                  Features
+                </Link>
               </li>
               <li>
-                <Link href="/login" className="hover:text-primary transition-colors">Sign In</Link>
+                <Link
+                  href="/login"
+                  className="hover:text-primary transition-colors"
+                >
+                  Sign In
+                </Link>
               </li>
               <li>
-                <Link href="/register" className="hover:text-primary transition-colors">Create Account</Link>
+                <Link
+                  href="/register"
+                  className="hover:text-primary transition-colors"
+                >
+                  Create Account
+                </Link>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-sm font-bold font-sans uppercase tracking-wider">Legal</h4>
+            <h4 className="text-sm font-bold font-sans uppercase tracking-wider">
+              Legal
+            </h4>
             <ul className="space-y-2 text-sm text-muted-foreground font-mono">
               <li>
-                <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+                <Link
+                  href="/privacy"
+                  className="hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+                <Link
+                  href="/terms"
+                  className="hover:text-primary transition-colors"
+                >
+                  Terms of Service
+                </Link>
               </li>
             </ul>
           </div>
@@ -90,14 +132,16 @@ export function Footer() {
           <p className="text-xs text-muted-foreground font-mono">
             &copy; {new Date().getFullYear()} DevVault Inc. All rights reserved.
           </p>
-          
+
           {/* Developer System Status Badge */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border/50 bg-muted/30">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            <span className="text-xs font-mono text-muted-foreground">Systems Operational</span>
+            <span className="text-xs font-mono text-muted-foreground">
+              Systems Operational
+            </span>
           </div>
         </div>
       </div>
