@@ -55,7 +55,7 @@ export default function VaultPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
           {resources.map((resource, i) => (
-            <ResourceCard key={resource.id} resource={resource} index={i} />
+            <ResourceCard key={resource.id} resource={resource} index={i} showActions={true} />
           ))}
         </div>
       )}

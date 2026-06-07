@@ -14,6 +14,7 @@ import {
   Code2,
   FolderOpen,
   PlusCircle,
+  Home,
 } from "lucide-react";
 import {
   Sidebar,
@@ -124,6 +125,12 @@ export function DashboardSidebar() {
                 <SidebarMenuButton isActive={pathname.startsWith("/dashboard/add")} render={<Link href="/dashboard/add" />} tooltip="Add Resource">
                   <PlusCircle />
                   <span>Add Resource</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton render={<Link href="/" />} tooltip="Back to Home" className="mt-4 border border-border/50 bg-muted/50 hover:bg-muted">
+                  <Home className="text-primary" />
+                  <span className="font-bold">Return to Home</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

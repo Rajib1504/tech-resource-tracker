@@ -15,9 +15,10 @@ import Link from "next/link";
 interface ResourceCardProps {
   resource: any;
   index?: number;
+  showActions?: boolean;
 }
 
-export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
+export function ResourceCard({ resource, index = 0, showActions = false }: ResourceCardProps) {
   return (
     <Dialog>
       <DialogTrigger
@@ -167,29 +168,33 @@ export function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              <Link
-                href={`/dashboard/edit/${resource.id}`}
-                className="inline-flex items-center gap-2 bg-muted text-muted-foreground px-4 py-2 rounded-md hover:bg-muted/80 transition-colors font-medium text-sm"
-              >
-                Edit
-              </Link>
-              <button
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (!confirm("Are you sure you want to delete this resource?")) return;
-                  try {
-                    const res = await fetch(`/api/resources/${resource.id}`, { method: "DELETE" });
-                    if (!res.ok) throw new Error("Failed to delete");
-                    toast.success("Resource deleted!");
-                    window.location.reload();
-                  } catch (err) {
-                    toast.error("Failed to delete resource");
-                  }
-                }}
-                className="inline-flex items-center gap-2 bg-red-500/10 text-red-500 px-4 py-2 rounded-md hover:bg-red-500/20 transition-colors font-medium text-sm"
-              >
-                Delete
-              </button>
+              {showActions && (
+                <>
+                  <Link
+                    href={`/dashboard/edit/${resource.id}`}
+                    className="inline-flex items-center gap-2 bg-muted text-muted-foreground px-4 py-2 rounded-md hover:bg-muted/80 transition-colors font-medium text-sm"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (!confirm("Are you sure you want to delete this resource?")) return;
+                      try {
+                        const res = await fetch(`/api/resources/${resource.id}`, { method: "DELETE" });
+                        if (!res.ok) throw new Error("Failed to delete");
+                        toast.success("Resource deleted!");
+                        window.location.reload();
+                      } catch (err) {
+                        toast.error("Failed to delete resource");
+                      }
+                    }}
+                    className="inline-flex items-center gap-2 bg-red-500/10 text-red-500 px-4 py-2 rounded-md hover:bg-red-500/20 transition-colors font-medium text-sm"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
               {resource.type === "LINK" && resource.url && (
                 <a
                   href={resource.url}
