@@ -195,10 +195,9 @@ export default function EditResourcePage() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium font-mono">
-              Description <span className="text-red-500">*</span>
+              Description (Optional)
             </label>
             <textarea
-              required
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })

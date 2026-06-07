@@ -13,7 +13,8 @@ export const resourceSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters long")
     .max(400, "Description must be at most 400 characters long")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   categoryId: z.string().min(1, "Category is required"),
 }).refine((data) => {
   if (data.type === "LINK") {
@@ -41,7 +42,8 @@ export const UpdateResourceSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters long")
     .max(400, "Description must be at most 400 characters long")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
 });
 
 export type ResourceSchemaType = z.infer<typeof resourceSchema>;
