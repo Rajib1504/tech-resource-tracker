@@ -49,12 +49,12 @@ export function ResourceCard({ resource, index = 0, showActions = false }: Resou
           />
         }
       >
-          <div className="h-40 bg-muted relative overflow-hidden flex items-center justify-center border-b border-border/50">
+          <div className="h-40 bg-muted/40 relative overflow-hidden flex items-center justify-center border-b border-border/50">
             {resource.thumbnailUrl ? (
               <img
                 src={resource.thumbnailUrl}
                 alt={resource.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
             ) : (
@@ -137,11 +137,11 @@ export function ResourceCard({ resource, index = 0, showActions = false }: Resou
 
         <div className="mt-4 space-y-6">
           {resource.thumbnailUrl && (
-            <div className="w-full h-48 md:h-64 rounded-xl overflow-hidden border border-border/50 relative">
+            <div className="w-full h-48 md:h-64 rounded-xl overflow-hidden border border-border/50 relative bg-muted/40">
               <img
                 src={resource.thumbnailUrl}
                 alt={resource.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain p-2"
               />
             </div>
           )}
