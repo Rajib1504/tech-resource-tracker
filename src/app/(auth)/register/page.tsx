@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { TerminalSquare, Loader2 } from "lucide-react";
+import { IconLogo } from "@/components/icon-logo";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -55,9 +56,9 @@ export default function RegisterPage() {
           <div className="flex flex-col items-center space-y-2 text-center">
             <Link
               href="/"
-              className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-2 hover:scale-105 transition-transform"
+              className="flex items-center justify-center mb-2 hover:scale-105 transition-transform"
             >
-              <TerminalSquare className="w-6 h-6" />
+              <IconLogo className="h-10 w-auto text-primary" />
             </Link>
             <h1 className="text-2xl font-bold tracking-tight font-sans">
               Create an account

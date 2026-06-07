@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 import { TerminalSquare, User2, LayoutDashboard, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
+import { IconLogo } from "./icon-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -53,9 +54,7 @@ export function Navbar() {
     <header className="sticky top-0 z-40 w-full backdrop-blur-xl border-b border-border/40 bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-            <TerminalSquare className="h-5 w-5" />
-          </div>
+          <IconLogo className="h-6 w-auto text-primary transition-transform group-hover:scale-105" />
           <span className="font-mono font-bold tracking-tight">DevVault</span>
         </Link>
         <div className="flex items-center gap-4">

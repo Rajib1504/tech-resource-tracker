@@ -77,15 +77,15 @@ export function CustomCursor() {
 
       {/* 2. Sonar Ring */}
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-[100] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/50"
+        className={`pointer-events-none fixed top-0 left-0 z-[100] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-colors duration-150 ${
+          isHovering ? "border-primary bg-primary/10" : "border-primary/50 bg-transparent"
+        }`}
         style={{
           x: ringX,
           y: ringY,
         }}
         animate={{
           scale: isHovering ? 1.5 : 1,
-          borderColor: isHovering ? "hsl(var(--primary))" : "hsla(var(--primary), 0.5)",
-          backgroundColor: isHovering ? "hsla(var(--primary), 0.1)" : "transparent",
         }}
         transition={{ duration: 0.15 }}
       />

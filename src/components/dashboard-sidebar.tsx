@@ -14,8 +14,8 @@ import {
   Code2,
   FolderOpen,
   PlusCircle,
-  Home,
 } from "lucide-react";
+import { IconLogo } from "./icon-logo";
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +27,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -41,6 +42,7 @@ import { toast } from "sonner";
 export function DashboardSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { setOpenMobile, isMobile } = useSidebar();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -74,10 +76,8 @@ export function DashboardSidebar() {
   return (
     <Sidebar className="border-r border-border/40 font-mono">
       <SidebarHeader className="border-b border-border/40 p-4 bg-sidebar">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-            <TerminalSquare className="h-5 w-5" />
-          </div>
+        <Link href="/" className="flex items-center gap-2 group" onClick={() => isMobile && setOpenMobile(false)}>
+          <IconLogo className="h-6 w-auto text-primary transition-transform group-hover:scale-105" />
           <span className="font-sans font-bold tracking-tight text-lg">
             DevVault
           </span>
@@ -92,45 +92,39 @@ export function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname === "/dashboard"} render={<Link href="/dashboard" />} tooltip="Overview">
+                <SidebarMenuButton isActive={pathname === "/dashboard"} render={<Link href="/dashboard" />} tooltip="Overview" onClick={() => isMobile && setOpenMobile(false)}>
                   <LayoutDashboard />
                   <span>Overview</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/vault")} render={<Link href="/dashboard/vault" />} tooltip="My Vault">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/vault")} render={<Link href="/dashboard/vault" />} tooltip="My Vault" onClick={() => isMobile && setOpenMobile(false)}>
                   <FolderOpen />
                   <span>My Vault</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/snippets")} render={<Link href="/dashboard/snippets" />} tooltip="Saved Snippets">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/snippets")} render={<Link href="/dashboard/snippets" />} tooltip="Saved Snippets" onClick={() => isMobile && setOpenMobile(false)}>
                   <Code2 />
                   <span>Snippets</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/links")} render={<Link href="/dashboard/links" />} tooltip="Saved Links">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/links")} render={<Link href="/dashboard/links" />} tooltip="Saved Links" onClick={() => isMobile && setOpenMobile(false)}>
                   <Bookmark />
                   <span>Links</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/categories")} render={<Link href="/dashboard/categories" />} tooltip="Categories">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/categories")} render={<Link href="/dashboard/categories" />} tooltip="Categories" onClick={() => isMobile && setOpenMobile(false)}>
                   <FolderOpen />
                   <span>Categories</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/add")} render={<Link href="/dashboard/add" />} tooltip="Add Resource">
+                <SidebarMenuButton isActive={pathname.startsWith("/dashboard/add")} render={<Link href="/dashboard/add" />} tooltip="Add Resource" onClick={() => isMobile && setOpenMobile(false)}>
                   <PlusCircle />
                   <span>Add Resource</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton render={<Link href="/" />} tooltip="Back to Home" className="mt-4 border border-border/50 bg-muted/50 hover:bg-muted">
-                  <Home className="text-primary" />
-                  <span className="font-bold">Return to Home</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -179,6 +173,7 @@ export function DashboardSidebar() {
                 <DropdownMenuItem
                   render={<Link href="/dashboard/profile" />}
                   className="cursor-pointer font-mono text-sm focus:bg-primary/10 focus:text-primary"
+                  onClick={() => isMobile && setOpenMobile(false)}
                 >
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Profile Settings</span>

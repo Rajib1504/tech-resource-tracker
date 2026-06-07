@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TerminalSquare } from "lucide-react";
+import { IconLogo } from "./icon-logo";
 
 const GithubIcon = ({ className }: { className?: string }) => (
   <svg
@@ -39,9 +40,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2 group w-fit">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <TerminalSquare className="h-5 w-5" />
-              </div>
+              <IconLogo className="h-6 w-auto text-primary transition-transform group-hover:scale-105" />
               <span className="font-mono font-bold tracking-tight text-lg">DevVault</span>
             </Link>
             <p className="max-w-xs text-sm text-muted-foreground font-mono">
