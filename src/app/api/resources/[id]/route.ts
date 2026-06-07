@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken";
 import * as cheerio from "cheerio";
 import { getYouTubeThumbnail } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 export const GET = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   /*
@@ -188,6 +189,9 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id
         description
       }
     })
+
+    revalidatePath("/")
+
     return NextResponse.json({
       success: true,
       message: "Resource updated successfully",
@@ -270,6 +274,9 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ i
     const deleteResource = await prisma.resource.delete({
       where: { id }
     })
+
+    revalidatePath("/")
+
     return NextResponse.json({
       success: true,
       message: "Resource deleted successfully",

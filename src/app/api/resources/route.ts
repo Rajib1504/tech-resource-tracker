@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import { prisma } from "@/lib/db";
 import * as cheerio from "cheerio";
 import { getYouTubeThumbnail } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 
 export const POST = async (req: NextRequest) => {
   /*
@@ -141,6 +142,9 @@ export const POST = async (req: NextRequest) => {
         thumbnailUrl
       }
     })
+
+    revalidatePath("/")
+
     return NextResponse.json({
       success: true,
       message: "Resource created successfully",
