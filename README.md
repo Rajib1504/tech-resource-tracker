@@ -2,6 +2,10 @@
 
 **Live Demo**: [https://inapp.app/rajib](https://inapp.app/rajib)
 
+**Test Credentials**:
+- **Email**: `test@gmail.com`
+- **Password**: `Rajib123!`
+
 ## Project Overview
 
 DevVault is a modern, developer-centric platform built to organize, store, and discover your code snippets, API documentation links, architecture diagrams, and tech articles. This project was built to demonstrate the core concepts of Next.js 15 (App Router) taught in the ChaiCode Web Dev Cohort 2026.
